@@ -1,20 +1,22 @@
 package utils;
 
-public class Cell<T> {
-    private T state;
+public class Cell{
+    private double state;
     private int x,y;
+    private double ros;
 
-    public Cell(int x, int y, T initialState) {
+
+    public Cell(int x, int y, double initialState) {
         this.state = initialState;
         this.x = x;
         this.y = y;
     }
 
-    public T getState(){
+    public double getState(){
         return this.state;
     }
 
-    public void setState(T state) {
+    public void setState(double state) {
         this.state = state;
     }
 

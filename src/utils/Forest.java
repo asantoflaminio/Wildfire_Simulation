@@ -1,6 +1,6 @@
 package utils;
 
-public class Forest <T>{
+public class Forest {
     private int width,height;
 
     private Cell[][] forest;
@@ -13,10 +13,9 @@ public class Forest <T>{
     }
 
     private void initializeForest() {
-        //inicializar como es la grilla inicial, en el modelo1 el T va a ser StateEnum mientras que en el modelo2 va a ser Double
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                this.forest[i][j] = new Cell<T>(i,j, null );
+                this.forest[i][j] = new Cell(i,j, 1L);
             }
         }
     }
@@ -43,5 +42,9 @@ public class Forest <T>{
 
     public void setForest(Cell[][] forest) {
         this.forest = forest;
+    }
+
+    public Cell getCell(int i, int j) {
+        return this.forest[i][j];
     }
 }

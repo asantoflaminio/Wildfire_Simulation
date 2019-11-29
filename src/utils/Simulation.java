@@ -6,5 +6,7 @@ public interface Simulation {
 
     void saveState(Forest forest);
 
-    Forest calculateState(Forest previousForest);
+    void calculateFireEvolution();
+
+    Double calculateState (Double previousState);
 }

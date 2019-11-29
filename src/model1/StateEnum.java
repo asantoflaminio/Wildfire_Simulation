@@ -14,11 +14,11 @@ public enum StateEnum implements Serializable {
         return StateEnum.valueOf(name);
     }
 
-    public static int getIndexByName(final String name){
+    public static long getIndexByName(final String name){
         return StateEnum.valueOf(name).ordinal();
     }
 
-    public int getIndex() {
+    public long getIndex() {
         return ordinal();
     }
 

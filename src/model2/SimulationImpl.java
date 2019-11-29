@@ -1,4 +1,4 @@
-package model1;
+package model2;
 
 
 import utils.Cell;
@@ -19,7 +19,6 @@ public class SimulationImpl implements Simulation {
             // calculateRos
             // calculateWindSpeedMatrix
             // calculateHeightMatrix
-            //initializeCell with those variables
 
         runSimulation();
     }
@@ -28,7 +27,7 @@ public class SimulationImpl implements Simulation {
     public void runSimulation() {
 
         for (int i = 0; i < totalTime; i += timeStep) {
-            calculateFireEvolution();
+            //calculateState
             //if new cell has been burnt, save state to be animated
         }
     }
@@ -40,29 +39,12 @@ public class SimulationImpl implements Simulation {
 
     @Override
     public void calculateFireEvolution() {
-        Forest newForest = new Forest(this.forest.getWidth(), this.forest.getHeight()); //TODO duplicate previousForest
-        for (int i = 0; i < this.forest.getWidth(); i++) {
-            for (int j = 0; j < this.forest.getHeight(); j++) {
-                newForest.getCell(i,j).setState(calculateState(this.forest.getCell(i,j).getState()));
-            }
-        }
+
     }
 
     @Override
-    public Double calculateState(Double previousState) {
-        switch (previousState.intValue()) {
-            case 1:
-                return 1D;
-            case 2:
-
-                break;
-            case 3:
-                //ripperoni pepperoni
-                break;
-            case 4:
-                break;
-        }
-        return 1d; //TODO
+    public Cell[][] calculateState(Double state) {
+        return new Cell[0][];
     }
 
 }
