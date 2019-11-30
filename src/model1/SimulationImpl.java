@@ -63,17 +63,20 @@ public class SimulationImpl implements Simulation {
         Forest newForest = copyForest(this.forest);
         int width = this.forest.getWidth();
         int height = this.forest.getHeight();
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Cell current = this.forest.getCell(i,j);
+                //Uso la variable spreadInto para que no se reescriba lo de neighbours
                 if(!current.isSpreadInto()) {
                     double currentState = current.getState();
                     if (currentState == 3) {
                         newForest.getCell(i, j).setState(4D);
+                        //TODO ver de sacar pero que se modifique bien (al llamar a un metodo se pasa una copia)
                         ArrayList<Cell> neighbours = new ArrayList<>();
-                        //  | x-1, y-1 | x, y-1 | x+1, y-1 |
-                        //  | x-1, y   | x, y   | x+1, y   |
-                        //  | x-1, y+1 | x, y+1 | x+1, y+1 |
+                        //  | i-1, j-1 | i, j-1 | i+1, j-1 |
+                        //  | i-1, j   | i, j   | i+1, j   |
+                        //  | i-1, j+1 | i, j+1 | i+1, j+1 |
                         if(i-1 >= 0 && j-1 >= 0)        neighbours.add(this.forest.getCell(i-1,j-1));
                         if(j-1 >= 0)                    neighbours.add(this.forest.getCell(i,j-1));
                         if(i+1 < width && j-1 >= 0)     neighbours.add(this.forest.getCell(i+1,j-1));
@@ -84,13 +87,11 @@ public class SimulationImpl implements Simulation {
                         if(i+1 < width && j+1 < height) neighbours.add(this.forest.getCell(i+1,j+1));
 
                         for (Cell c: neighbours) {
-                            int cellX = c.getX();
-                            int cellY = c.getY();
-                            if( Math.random() < 0.78) { //TODO pburn
-                                Cell n = newForest.getCell(cellX, cellY);
+                            Cell n = newForest.getCell(c.getX(), c.getY());
+                            if( Math.random() < 0.78 && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
                                 n.setState(3d);
-                                n.setSpreadInto(true);
                             }
+                            this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
                         }
                     }
                     else {
@@ -99,8 +100,9 @@ public class SimulationImpl implements Simulation {
                 }
             }
         }
-        clearForest();
+
         this.forest = newForest;
+        clearForest();
     }
 
     private void clearForest() {
