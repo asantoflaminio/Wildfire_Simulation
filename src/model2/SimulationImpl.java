@@ -43,8 +43,8 @@ public class SimulationImpl implements Simulation {
     }
 
     @Override
-    public Cell[][] calculateState(Double state) {
-        return new Cell[0][];
+    public Double calculateState(Double state) {
+        return 1d;
     }
 
 }
