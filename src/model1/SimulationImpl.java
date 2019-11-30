@@ -13,6 +13,7 @@ public class SimulationImpl implements Simulation {
     private long totalTime;
     private double timeStep;
     private Forest forest;
+    private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
 
     SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY){
         this.totalTime = totalTime;
@@ -26,7 +27,7 @@ public class SimulationImpl implements Simulation {
         Forest forest = new Forest(width, height);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                Cell cell = new Cell(i, j, 2d, 1);
+                Cell cell = new Cell(i, j, 2d, 1, 0.5, 0, SQUARE_LENGTH);
                 forest.getForest()[i][j] = cell;
             }
         }
@@ -36,7 +37,8 @@ public class SimulationImpl implements Simulation {
         Forest forest = new Forest(previousForest.getWidth(), previousForest.getHeight());
         for (int i = 0; i < previousForest.getWidth(); i++) {
             for (int j = 0; j < previousForest.getHeight(); j++) {
-                Cell cell = new Cell(i, j, previousForest.getCell(i,j).getState(), previousForest.getCell(i,j).getVegetation());
+                Cell cell = new Cell(i, j, previousForest.getCell(i,j).getState(), previousForest.getCell(i,j).getVegetation(), previousForest.getCell(i,j).getDensity(),
+                        previousForest.getCell(i,j).getElevation(), SQUARE_LENGTH);
                 forest.getForest()[i][j] = cell;
             }
         }

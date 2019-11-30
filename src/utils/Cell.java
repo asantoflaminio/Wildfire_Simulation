@@ -4,15 +4,45 @@ public class Cell{
     private double state;
     private int x,y;
     private double ros;
-    private int vegetation;
+    private double vegetation;
+    private double density;
+    private double elevation;
+    private double squareLength;
     private boolean spreadInto;
 
 
-    public Cell(int x, int y, double initialState, int vegetation) {
+    public Cell(int x, int y, double initialState, double vegetation, double density, double elevation, double squareLength) {
         this.state = initialState;
         this.x = x;
         this.y = y;
         this.vegetation = vegetation;
+        this.density = density;
+        this.elevation = elevation;
+        this.squareLength = squareLength;
+    }
+
+    public double getSquareLength() {
+        return squareLength;
+    }
+
+    public void setSquareLength(double squareLength) {
+        this.squareLength = squareLength;
+    }
+
+    public double getElevation() {
+        return elevation;
+    }
+
+    public void setElevation(double elevation) {
+        this.elevation = elevation;
+    }
+
+    public double getDensity() {
+        return density;
+    }
+
+    public void setDensity(double density) {
+        this.density = density;
     }
 
     public double getState(){
@@ -47,11 +77,11 @@ public class Cell{
         this.ros = ros;
     }
 
-    public int getVegetation() {
+    public double getVegetation() {
         return vegetation;
     }
 
-    public void setVegetation(int vegetation) {
+    public void setVegetation(double vegetation) {
         this.vegetation = vegetation;
     }
 
