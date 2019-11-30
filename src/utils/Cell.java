@@ -1,5 +1,7 @@
 package utils;
 
+import model1.StateEnum;
+
 public class Cell{
     private double state;
     private int x,y;

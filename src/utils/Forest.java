@@ -2,6 +2,7 @@ package utils;
 
 public class Forest {
     private int width,height;
+    private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
 
     private Cell[][] forest;
 
@@ -15,7 +16,7 @@ public class Forest {
     private void initializeForest() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                this.forest[i][j] = new Cell(i,j, 1, 1, 0.5);
+                this.forest[i][j] = new Cell(i,j, 1, 1, 0.5,0, SQUARE_LENGTH);
             }
         }
     }

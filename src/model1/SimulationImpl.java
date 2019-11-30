@@ -5,6 +5,7 @@ import utils.Cell;
 import utils.Forest;
 import utils.Simulation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,13 +14,19 @@ public class SimulationImpl implements Simulation {
     private long totalTime;
     private double timeStep;
     private Forest forest;
+    /*
+    Usemos siempre celdas de 1x1 porque sino tenemos que cambiar el tema
+    de initializeForest etc.
+     */
     private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
+    FileManager fm;
 
-    SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY){
+    SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
         this.forest = initializeForest(5,5);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
+        fm = new FileManager(filepath);
         printForest();
     }
 
@@ -45,14 +52,17 @@ public class SimulationImpl implements Simulation {
         return forest;
     }
     @Override
-    public void runSimulation() {
+    public void runSimulation() throws IOException {
 
-        for (double i = 0; i < totalTime; i += timeStep) {
-            calculateFireEvolution();
-            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
-            printForest();
-            //if new cell has been burnt, save state to be animated
-        }
+
+//        for (double i = 0; i < totalTime; i += timeStep) {
+//            calculateFireEvolution();
+//            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
+//            printForest();
+//            //if new cell has been burnt, save state to be animated
+//        }
+        fm.printForestForAnimation(this.forest);
+        fm.close();
     }
 
     @Override
