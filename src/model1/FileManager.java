@@ -58,14 +58,14 @@ public class FileManager {
                 Cell current = forest.getCell(i, j);
                 double id = Math.pow(2, i) * Math.pow(3, j);
                 double state = current.getState();
-                int rColor = 0;
-                int gColor = 0;
-                int bColor = 0;
+                double rColor = 0.0;
+                double gColor = 0.0;
+                double bColor = 0.0;
                 if(Double.compare(state, 1d) == 0) {
                     // 1d --> Cannot be burned: Waterways for example --> Light blue
-                    rColor = 36;
-                    gColor = 255;
-                    bColor = 234;
+                    rColor = 36.0/255.0;
+                    gColor = 255.0/255.0;
+                    bColor = 234.0/255.0;
                 } else if (Double.compare(state, 2d) == 0) {
                     // 2d --> Forest fuel --> Green (intensity varies according to density)
 
@@ -77,46 +77,46 @@ public class FileManager {
                         more than 1500m: brown
                          */
                         if(current.getElevation() < 500) {
-                            rColor = 143;
-                            gColor = 247;
-                            bColor = 122;
+                            rColor = 143.0/255.0;
+                            gColor = 247.0/255.0;
+                            bColor = 122.0/255.0;
                         } else if (current.getElevation() < 1000) {
-                            rColor = 255;
-                            gColor = 242;
-                            bColor = 119;
+                            rColor = 255.0/255.0;
+                            gColor = 242.0/255.0;
+                            bColor = 119.0/255.0;
                         } else if (current.getElevation() < 1500) {
-                            rColor = 255;
-                            gColor = 215;
-                            bColor = 119;
+                            rColor = 255.0/255.0;
+                            gColor = 215.0/255.0;
+                            bColor = 119.0/255.0;
                         } else {
-                            rColor = 98;
-                            gColor = 74;
-                            bColor = 18;
+                            rColor = 98.0/255.0;
+                            gColor = 74.0/255.0;
+                            bColor = 18.0/255.0;
                         }
                     } else {
                         //density is the default option
                         if(current.getDensity() < -0.1) {
                             //sparse
-                            rColor = 130;
-                            gColor = 235;
-                            bColor = 141;
+                            rColor = 130.0/255.0;
+                            gColor = 235.0/255.0;
+                            bColor = 141.0/255.0;
                         } else if ( current.getDensity() > 0.1) {
                             //dense
-                            rColor = 0;
-                            gColor = 107;
-                            bColor = 11;
+                            rColor = 0.0;
+                            gColor = 107.0/255.0;
+                            bColor = 11.0/255.0;
                         } else {
                             // normal (between -0.1 and 0.1)
-                            rColor = 0;
-                            gColor = 182;
-                            bColor = 18;
+                            rColor = 0.0;
+                            gColor = 182.0/255.0;
+                            bColor = 18.0/255.0;
                         }
                     }
 
 
                 } else if (Double.compare(state, 3d) == 0) {
                     // 3d --> Burning down --> Red
-                    rColor = 255;
+                    rColor = 255.0/255.0;
                 }
 
                 // else
