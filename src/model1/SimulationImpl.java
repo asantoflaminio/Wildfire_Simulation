@@ -38,10 +38,10 @@ public class SimulationImpl implements Simulation {
     private static double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
     private static double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
-    SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
+    SimulationImpl(long totalTime, double timeStep, int forestWidth, int forestHeight, int fireStartX, int fireStartY, String filepath) {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
-        this.forest = initializeForest(5,5);
+        this.forest = initializeForest(forestWidth,forestHeight);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
         printForest();
@@ -94,12 +94,13 @@ public class SimulationImpl implements Simulation {
         Forest newForest = copyForest(this.forest);
         int width = this.forest.getWidth();
         int height = this.forest.getHeight();
-
+        int count = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Cell current = this.forest.getCell(i,j);
                 //Uso la variable spreadInto para que no se reescriba lo de neighbours
                 if(!current.isSpreadInto()) {
+                    count++;
                     double currentState = current.getState();
                     if (currentState == 3) {
                         newForest.getCell(i, j).setState(4D);
@@ -118,11 +119,15 @@ public class SimulationImpl implements Simulation {
                         if(i+1 < width && j+1 < height) neighbours.add(this.forest.getCell(i+1,j+1));
 
                         for (Cell c: neighbours) {
-                            Cell n = newForest.getCell(c.getX(), c.getY());
-                            if( Math.random() < 0.78 && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
-                                n.setState(3d);
-                                this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
+                            if(c.getState() != 3d) {
+                                // si estaba quemandose no hagas nada, desps se va a poner negra sola
+                                Cell n = newForest.getCell(c.getX(), c.getY());
+                                if( Math.random() < 0.78 && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
+                                    n.setState(3d);
+                                    this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
+                                }
                             }
+
 
                         }
                     }
@@ -133,6 +138,7 @@ public class SimulationImpl implements Simulation {
             }
         }
 
+        System.out.println("COUNT ES " + count);
         this.forest = newForest;
         clearForest();
     }
