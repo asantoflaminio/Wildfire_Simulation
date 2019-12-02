@@ -29,6 +29,14 @@ public class SimulationImpl implements Simulation {
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
 
+    private double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
+    private double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
+    private double northWestMatrix[][] = {{0.0, 45.0, 90.0}, {45.0, 0.0, 135.0}, {90.0, 135.0, 180.0}};
+    private double southMatrix[][] = {{135.0, 180.0, 135.0}, {90.0, 0.0, 90.0}, {45.0, 0.0, 45.0}};
+    private double southEastMatrix[][] = {{180.0, 135.0, 90.0}, {135.0, 0.0, 45.0}, {90.0, 45.0, 0.0}};
+    private double southWestMatrix[][] = {{90.0, 135.0, 180.0}, {45.0, 0.0, 135.0}, {0.0, 45.0, 90.0}};
+    private double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
+    private double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
     SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
         this.totalTime = totalTime;
@@ -179,12 +187,56 @@ public class SimulationImpl implements Simulation {
 
     }
 
-    private double calculatePWind() {
+    private double calculatePWind(Cell evaluatedCell, Cell burningCell) {
+
+        int column;
+        int row;
+        if((evaluatedCell.getX() - burningCell.getX()) < 0) {
+            column = 0;
+        } else if ((evaluatedCell.getX() - burningCell.getX()) == 0) {
+            column = 1;
+        } else {
+            column = 2;
+        }
+
+        if((evaluatedCell.getY() - burningCell.getY()) < 0) {
+            row = 0;
+        } else if ((evaluatedCell.getY() - burningCell.getY()) == 0) {
+            row = 1;
+        } else {
+            row = 2;
+        }
 
         double angle;
-        if(windDirection.equals(WindEnum.NORTH)) {
-            angle = getWindAngle();
+        switch(windDirection) {
+            case NORTH:
+                angle = northMatrix[row][column];
+                break;
+            case NORTHEAST:
+                angle = northEastMatrix[row][column];
+                break;
+            case NORTHWEST:
+                angle = northWestMatrix[row][column];
+                break;
+            case SOUTH:
+                angle = southMatrix[row][column];
+                break;
+            case SOUTHWEST:
+                angle = southWestMatrix[row][column];
+                break;
+            case SOUTHEAST:
+                angle = southEastMatrix[row][column];
+                break;
+            case WEST:
+                angle = westMatrix[row][column];
+                break;
+            case EAST:
+                angle = eastMatrix[row][column];
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + windDirection);
         }
+
 
         double ft = Math.exp(windSpeed*c2*(Math.cos(Math.toRadians(angle)) - 1));
         return Math.exp(c1*windSpeed)*ft;
