@@ -21,6 +21,13 @@ public class SimulationImpl implements Simulation {
     private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
     FileManager fm;
 
+    /* Variables */
+    private static double Ph = 0.58;// probability constant
+    private static double a = 0.078;
+    private static double c1 = 0.045;
+    private static double c2 = 0.131;
+
+
     SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
@@ -153,12 +160,6 @@ public class SimulationImpl implements Simulation {
 //        }
     }
 
-    @Override
-    public Double calculateState(Double previousState) {
-
-        return 1d; //TODO
-    }
-
     private void printForest() {
         for (int i = 0; i < this.forest.getHeight(); i++) {
             for (int j = 0; j < this.forest.getWidth(); j++) {
@@ -166,6 +167,37 @@ public class SimulationImpl implements Simulation {
             }
             System.out.println();
         }
+    }
+
+//    private double calculatePBurn(Cell evaluatedCell, Cell burningCell) {
+//
+//        double Pw = calculatePWind();
+//        double Ps = calculatePSlope(evaluatedCell, burningCell);
+//        return Ph * (1 + evaluatedCell.getVegetation()) * (1 + evaluatedCell.getDensity()) * Pw * Ps;
+//
+//    }
+
+//    private double calculatePWind() {
+//
+//    }
+
+    private double calculatePSlope(Cell evaluatedCell, Cell burningCell) {
+
+
+        double angle;
+            /*
+            Case 1: Adjacent
+             */
+            if((evaluatedCell.getX() == burningCell.getX()) && (evaluatedCell.getY() == burningCell.getY())) {
+               angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/SQUARE_LENGTH);
+            } else {
+            /*
+            Case 2: Diagonal
+             */
+                angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/(Math.sqrt(2)*SQUARE_LENGTH));
+            }
+
+        return Math.exp(a*angle);
     }
 }
 

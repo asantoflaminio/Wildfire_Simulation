@@ -10,5 +10,4 @@ public interface Simulation {
 
     void calculateFireEvolution();
 
-    Double calculateState (Double previousState);
 }
