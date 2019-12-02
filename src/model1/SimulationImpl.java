@@ -26,6 +26,8 @@ public class SimulationImpl implements Simulation {
     private static double a = 0.078;
     private static double c1 = 0.045;
     private static double c2 = 0.131;
+    private double windSpeed = 10; // m/s
+    private WindEnum windDirection = WindEnum.NORTH;
 
 
     SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
@@ -169,17 +171,24 @@ public class SimulationImpl implements Simulation {
         }
     }
 
-//    private double calculatePBurn(Cell evaluatedCell, Cell burningCell) {
-//
-//        double Pw = calculatePWind();
-//        double Ps = calculatePSlope(evaluatedCell, burningCell);
-//        return Ph * (1 + evaluatedCell.getVegetation()) * (1 + evaluatedCell.getDensity()) * Pw * Ps;
-//
-//    }
+    private double calculatePBurn(Cell evaluatedCell, Cell burningCell) {
 
-//    private double calculatePWind() {
-//
-//    }
+        double Pw = calculatePWind(evaluatedCell, burningCell);
+        double Ps = calculatePSlope(evaluatedCell, burningCell);
+        return Ph * (1 + evaluatedCell.getVegetation()) * (1 + evaluatedCell.getDensity()) * Pw * Ps;
+
+    }
+
+    private double calculatePWind() {
+
+        double angle;
+        if(windDirection.equals(WindEnum.NORTH)) {
+            angle = getWindAngle();
+        }
+
+        double ft = Math.exp(windSpeed*c2*(Math.cos(Math.toRadians(angle)) - 1));
+        return Math.exp(c1*windSpeed)*ft;
+    }
 
     private double calculatePSlope(Cell evaluatedCell, Cell burningCell) {
 
