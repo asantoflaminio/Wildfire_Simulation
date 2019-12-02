@@ -29,14 +29,14 @@ public class SimulationImpl implements Simulation {
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
 
-    private double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
-    private double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
-    private double northWestMatrix[][] = {{0.0, 45.0, 90.0}, {45.0, 0.0, 135.0}, {90.0, 135.0, 180.0}};
-    private double southMatrix[][] = {{135.0, 180.0, 135.0}, {90.0, 0.0, 90.0}, {45.0, 0.0, 45.0}};
-    private double southEastMatrix[][] = {{180.0, 135.0, 90.0}, {135.0, 0.0, 45.0}, {90.0, 45.0, 0.0}};
-    private double southWestMatrix[][] = {{90.0, 135.0, 180.0}, {45.0, 0.0, 135.0}, {0.0, 45.0, 90.0}};
-    private double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
-    private double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
+    private static double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
+    private static double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
+    private static double northWestMatrix[][] = {{0.0, 45.0, 90.0}, {45.0, 0.0, 135.0}, {90.0, 135.0, 180.0}};
+    private static double southMatrix[][] = {{135.0, 180.0, 135.0}, {90.0, 0.0, 90.0}, {45.0, 0.0, 45.0}};
+    private static double southEastMatrix[][] = {{180.0, 135.0, 90.0}, {135.0, 0.0, 45.0}, {90.0, 45.0, 0.0}};
+    private static double southWestMatrix[][] = {{90.0, 135.0, 180.0}, {45.0, 0.0, 135.0}, {0.0, 45.0, 90.0}};
+    private static double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
+    private static double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
     SimulationImpl(long totalTime, double timeStep, int fireStartX, int fireStartY, String filepath) {
         this.totalTime = totalTime;
@@ -72,12 +72,14 @@ public class SimulationImpl implements Simulation {
     public void runSimulation() throws IOException {
 
 
-//        for (double i = 0; i < totalTime; i += timeStep) {
-//            calculateFireEvolution();
-//            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
-//            printForest();
-//            //if new cell has been burnt, save state to be animated
-//        }
+        for (double i = 0; i < totalTime; i += timeStep) {
+
+            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
+            printForest();
+            fm.printForestForAnimation(this.forest);
+            calculateFireEvolution();
+            //if new cell has been burnt, save state to be animated
+        }
         fm.printForestForAnimation(this.forest);
         fm.close();
     }
@@ -119,8 +121,9 @@ public class SimulationImpl implements Simulation {
                             Cell n = newForest.getCell(c.getX(), c.getY());
                             if( Math.random() < 0.78 && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
                                 n.setState(3d);
+                                this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
                             }
-                            this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
+
                         }
                     }
                     else {

@@ -21,6 +21,7 @@ public class Cell{
         this.density = density;
         this.elevation = elevation;
         this.squareLength = squareLength;
+        this.spreadInto = false;
     }
 
     public double getSquareLength() {
