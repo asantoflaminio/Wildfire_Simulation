@@ -7,7 +7,7 @@ import utils.Simulation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
+
 
 public class SimulationImpl implements Simulation {
 
@@ -52,7 +52,8 @@ public class SimulationImpl implements Simulation {
         Forest forest = new Forest(width, height);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                Cell cell = new Cell(i, j, 2d, 1, 0.5, 0, SQUARE_LENGTH);
+                //TODO read from parser
+                Cell cell = new Cell(i, j, 2d, 1, 2, 0, SQUARE_LENGTH);
                 forest.getForest()[i][j] = cell;
             }
         }
@@ -78,7 +79,7 @@ public class SimulationImpl implements Simulation {
         while(forestOnFire) {
             i += timeStep;
            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
-           // printForest();
+//            printForest();
             fm.printForestForAnimation(this.forest);
             calculateFireEvolution();
             //if new cell has been burnt, save state to be animated
@@ -87,10 +88,6 @@ public class SimulationImpl implements Simulation {
         fm.close();
     }
 
-    @Override
-    public void saveState(Forest forest) {
-
-    }
 
     @Override
     public void calculateFireEvolution() {
@@ -131,8 +128,6 @@ public class SimulationImpl implements Simulation {
                                     this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
                                 }
                             }
-
-
                         }
                     }
                     else {
@@ -195,7 +190,7 @@ public class SimulationImpl implements Simulation {
 
         double Pw = calculatePWind(evaluatedCell, burningCell);
         double Ps = calculatePSlope(evaluatedCell, burningCell);
-        return Ph * (1 + evaluatedCell.getVegetation()) * (1 + evaluatedCell.getDensity()) * Pw * Ps;
+        return Ph * (1 + evaluatedCell.getPVeg()) * (1 + evaluatedCell.getPDen()) * Pw * Ps;
 
     }
 

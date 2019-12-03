@@ -6,8 +6,6 @@ public interface Simulation {
 
     void runSimulation() throws IOException;
 
-    void saveState(Forest forest);
-
     void calculateFireEvolution();
 
 }

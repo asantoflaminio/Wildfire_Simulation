@@ -16,7 +16,7 @@ public class Forest {
     private void initializeForest() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                this.forest[i][j] = new Cell(i,j, 1, 1, 0.5,0, SQUARE_LENGTH);
+                this.forest[i][j] = new Cell(i,j, 1, 1, 2,0, SQUARE_LENGTH);
             }
         }
     }
