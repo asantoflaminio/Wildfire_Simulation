@@ -20,6 +20,7 @@ public class SimulationImpl implements Simulation {
      */
     private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
     FileManager fm;
+    private boolean forestOnFire = true;
 
     /* Variables */
     private static double Ph = 0.58;// probability constant
@@ -44,7 +45,7 @@ public class SimulationImpl implements Simulation {
         this.forest = initializeForest(forestWidth,forestHeight);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
-        printForest();
+       // printForest();
     }
 
     private Forest initializeForest(int width, int height) {
@@ -72,10 +73,12 @@ public class SimulationImpl implements Simulation {
     public void runSimulation() throws IOException {
 
 
-        for (double i = 0; i < totalTime; i += timeStep) {
-
-            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
-            printForest();
+//        for (double i = 0; i < totalTime; i += timeStep) {
+        double i = 0.0;
+        while(forestOnFire) {
+            i += timeStep;
+           System.out.println("---------------------- Forest at time: "+i+" ----------------------");
+           // printForest();
             fm.printForestForAnimation(this.forest);
             calculateFireEvolution();
             //if new cell has been burnt, save state to be animated
@@ -94,13 +97,13 @@ public class SimulationImpl implements Simulation {
         Forest newForest = copyForest(this.forest);
         int width = this.forest.getWidth();
         int height = this.forest.getHeight();
-        int count = 0;
+        forestOnFire = false;
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Cell current = this.forest.getCell(i,j);
                 //Uso la variable spreadInto para que no se reescriba lo de neighbours
                 if(!current.isSpreadInto()) {
-                    count++;
                     double currentState = current.getState();
                     if (currentState == 3) {
                         newForest.getCell(i, j).setState(4D);
@@ -122,7 +125,8 @@ public class SimulationImpl implements Simulation {
                             if(c.getState() != 3d) {
                                 // si estaba quemandose no hagas nada, desps se va a poner negra sola
                                 Cell n = newForest.getCell(c.getX(), c.getY());
-                                if( Math.random() < 0.78 && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
+                                if( Math.random() < calculatePBurn(c, current) && n.getState() != 4d && n.getState() != 1d) { //TODO pburn
+                                    forestOnFire = true;
                                     n.setState(3d);
                                     this.forest.getCell(c.getX(), c.getY()).setSpreadInto(true);
                                 }
@@ -138,7 +142,6 @@ public class SimulationImpl implements Simulation {
             }
         }
 
-        System.out.println("COUNT ES " + count);
         this.forest = newForest;
         clearForest();
     }

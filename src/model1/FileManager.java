@@ -141,7 +141,7 @@ public class FileManager {
         if(option.equals("elevation")) {
             bwElevation.write(builder.toString());
         } else{
-            System.out.println(builder.toString());
+           // System.out.println(builder.toString());
             bwDensity.write(builder.toString());
         }
     }
