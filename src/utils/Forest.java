@@ -10,7 +10,7 @@ public class Forest {
         this.width = width;
         this.height = height;
         this.forest = new Cell[width][height];
-        initializeForest();
+       // initializeForest();
     }
 
     private void initializeForest() {

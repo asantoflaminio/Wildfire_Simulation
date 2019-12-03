@@ -3,9 +3,7 @@ package model1;
 import utils.Cell;
 import utils.Forest;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileManager {
 
@@ -159,6 +157,32 @@ public class FileManager {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    /*
+    File format should be:
+    1st Line: Width
+    2nd Line: Height
+    Cells...
+
+     */
+    public static Forest readTerrain(String path) throws IOException {
+        BufferedReader bf = new BufferedReader(new FileReader(path));
+        String width = bf.readLine();
+        String height = bf.readLine();
+        int w = Integer.valueOf(width);
+        int h = Integer.valueOf(height);
+        Forest ans = new Forest(w, h);
+        Cell[][] cells = new Cell[w][h];
+        for (int i = 0; i < w*h ; i++) {
+            String[] s = bf.readLine().split(" ");
+            cells[Integer.valueOf(s[0])][Integer.valueOf(s[1])] = new Cell(Integer.valueOf(s[0]), Integer.valueOf(s[1]), Double.valueOf(s[2]),
+                    Integer.valueOf(s[3]), Integer.valueOf(s[4]), Double.valueOf(s[5]), Double.valueOf(s[6]));
+
+        }
+        ans.setForest(cells);
+        bf.close();
+        return ans;
     }
 
 }

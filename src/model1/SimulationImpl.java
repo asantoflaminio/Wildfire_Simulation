@@ -39,14 +39,18 @@ public class SimulationImpl implements Simulation {
     private static double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
     private static double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
-    SimulationImpl(long totalTime, double timeStep, int forestWidth, int forestHeight, int fireStartX, int fireStartY, String filepath) {
+    SimulationImpl(long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
-        this.forest = initializeForest(forestWidth,forestHeight);
+       // this.forest = initializeForest(forestWidth,forestHeight);
+        this.forest = FileManager.readTerrain(forestPath);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
+        System.out.println("Forest initialized.");
        // printForest();
     }
+
+
 
     private Forest initializeForest(int width, int height) {
         Forest forest = new Forest(width, height);
