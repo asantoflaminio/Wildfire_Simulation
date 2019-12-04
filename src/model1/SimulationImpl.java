@@ -146,8 +146,8 @@ public class SimulationImpl implements Simulation {
     }
 
     private void clearForest() {
-        for (int i = 0; i < this.forest.getHeight(); i++) {
-            for (int j = 0; j < this.forest.getWidth(); j++) {
+        for (int i = 0; i < this.forest.getWidth(); i++) {
+            for (int j = 0; j < this.forest.getHeight(); j++) {
                 this.forest.getCell(i,j).setSpreadInto(false);
             }
         }

@@ -51,8 +51,9 @@ public class FileManager {
     private void printForestByOption(Forest forest, String option) throws IOException {
         int cellAmount = forest.getHeight() * forest.getWidth();
         StringBuilder builder = new StringBuilder().append(cellAmount + "\r\n").append("//ID\t X\t Y\t Radius\t R\t G\t B\r\n");
-        for(int i = 0; i < forest.getHeight(); i++)  {
-            for(int j = 0; j < forest.getWidth(); j++) {
+        //System.out.println("HEIGHT: " + forest.getHeight() + "WIDTH: " + forest.getWidth());
+        for(int i = 0; i < forest.getWidth(); i++)  {
+            for(int j = 0; j < forest.getHeight(); j++) {
                 Cell current = forest.getCell(i, j);
                 double id = Math.pow(2, i) * Math.pow(3, j);
                 double state = current.getState();
@@ -93,12 +94,12 @@ public class FileManager {
                         }
                     } else {
                         //density is the default option
-                        if(current.getDensity() < -0.1) {
+                        if(current.getPDen() < -0.1) {
                             //sparse
                             rColor = 130.0/255.0;
                             gColor = 235.0/255.0;
                             bColor = 141.0/255.0;
-                        } else if ( current.getDensity() > 0.1) {
+                        } else if ( current.getPDen()  > 0.1) {
                             //dense
                             rColor = 0.0;
                             gColor = 107.0/255.0;
