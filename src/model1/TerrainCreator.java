@@ -71,4 +71,61 @@ public class TerrainCreator {
         bw.close();
         System.out.println("Terrain created.");
     }
+
+    /*
+       500 width
+       500 height
+       Sin elevacion
+       Densidad siempre igual.
+    */
+    public static void simpleSquare() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("terrains/simpleSquare.txt", true));
+        StringBuilder builder = new StringBuilder().append(500 + "\r\n").append(500 + "\r\n");
+        for(int i = 0; i < 500; i++) {
+            for(int j = 0; j < 500; j++) {
+                builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + "0.0" + " " + "1.0" + "\r\n");
+            }
+        }
+
+        bw.write(builder.toString());
+        bw.flush();
+        bw.close();
+        System.out.println("Simple square terrain created.");
+    }
+
+    /*
+       500 width
+       500 height
+       Elevacion intercalada
+       Densidad siempre igual.
+    */
+    public static void differentElevationsSquare() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("terrains/differentTerrain.txt", true));
+        StringBuilder builder = new StringBuilder().append(500 + "\r\n").append(500 + "\r\n");
+        boolean auxi =  true;
+        for(int i = 0; i < 500; i++) {
+            for(int j = 0; j < 500; j++) {
+                if(auxi) {
+                    if(j % 2 == 0) {
+                        builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + "0.0" + " " + "1.0" + "\r\n");
+                    } else {
+                        builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + "800.0" + " " + "1.0" + "\r\n");
+                    }
+                } else {
+                    if(j % 2 != 0) {
+                        builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + "0.0" + " " + "1.0" + "\r\n");
+                    } else {
+                        builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + "800.0" + " " + "1.0" + "\r\n");
+                    }
+                }
+
+            }
+            auxi = !auxi;
+        }
+
+        bw.write(builder.toString());
+        bw.flush();
+        bw.close();
+        System.out.println("Different elevations terrain created.");
+    }
 }
