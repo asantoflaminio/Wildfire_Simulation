@@ -48,7 +48,11 @@ public class SimulationImpl implements Simulation {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
        // this.forest = initializeForest(forestWidth,forestHeight);
-        this.forest = FileManager.readTerrain(forestPath);
+//        this.forest = FileManager.readTerrain(forestPath);
+        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\elev.txt";
+        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\dens.txt";
+        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\veg.txt";
+        this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
         System.out.println("Forest initialized.");
@@ -176,9 +180,9 @@ public class SimulationImpl implements Simulation {
                                     double pc = pc0 * (1 + current.getPDen()) * (1 + current.getVegetation());
                                     if(Math.random() < pc) {
                                         newForest.getCell(blastCell.getX(), blastCell.getY()).setState(3D);
-                                        System.out.println("Spotting ocurred from cell [" + current.getX()
-                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
-                                                blastCell.getY() + "].");
+//                                        System.out.println("Spotting ocurred from cell [" + current.getX()
+//                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
+//                                                blastCell.getY() + "].");
                                     }
                                 }
                             }
