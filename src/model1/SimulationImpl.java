@@ -30,6 +30,7 @@ public class SimulationImpl implements Simulation {
     private static double c2 = 0.131;
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
+    static boolean spottingActivated = true;
 
     private static double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
     private static double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
@@ -142,7 +143,10 @@ public class SimulationImpl implements Simulation {
                         Spotting
                         Np = cantidad de ramas que se desprenden
                          */
-                        int Np = ((int)Math.random())*5 + 1; // se desprenden entre 1 y 5 ramas
+                        int Np = 0;
+                        if(spottingActivated) {
+                            Np = ((int)Math.random())*5 + 1; // se desprenden entre 1 y 5 ramas
+                        }
 
                         while(Np > 0) {
                             Np--;
@@ -172,9 +176,9 @@ public class SimulationImpl implements Simulation {
                                     double pc = pc0 * (1 + current.getPDen()) * (1 + current.getVegetation());
                                     if(Math.random() < pc) {
                                         newForest.getCell(blastCell.getX(), blastCell.getY()).setState(3D);
-//                                        System.out.println("Spotting ocurred from cell [" + current.getX()
-//                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
-//                                                blastCell.getY() + "].");
+                                        System.out.println("Spotting ocurred from cell [" + current.getX()
+                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
+                                                blastCell.getY() + "].");
                                     }
                                 }
                             }
