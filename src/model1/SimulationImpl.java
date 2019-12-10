@@ -52,9 +52,9 @@ public class SimulationImpl implements Simulation {
         this.timeStep = timeStep;
        // this.forest = initializeForest(forestWidth,forestHeight);
       // this.forest = FileManager.readTerrain(forestPath);
-        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\elev.txt";
-        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\dens.txt";
-        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\veg.txt";
+        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\sub\\elev.txt";
+        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\sub\\dens.txt";
+        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\sub\\veg.txt";
         this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);

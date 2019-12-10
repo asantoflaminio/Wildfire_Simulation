@@ -123,7 +123,6 @@ public class Cell{
 //
 //        }
 //        return 0;
-        System.out.println(vegetation);
         switch (vegetation) {
             case 1:
             case 2:
