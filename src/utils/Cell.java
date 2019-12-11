@@ -57,7 +57,7 @@ public class Cell{
         if(density >= 10 && density <= 40){
             return -0.3;
         }
-        else if(density <= 70) {
+        else if(density <= 80) {
             return 0;
         }
         else if (density <= 100){
@@ -123,36 +123,40 @@ public class Cell{
 //
 //        }
 //        return 0;
-        switch (vegetation) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                return 0.4;
-            case 7:
-                return 0.5;
-            case 8:
-            case 9:
-            case 10:
-                return -0.4;
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-                return -0.5;
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-                return -1;
-
-
+//        switch (vegetation) {
+//            case 1:
+//            case 2:
+//            case 3:
+//            case 4:
+//            case 5:
+//            case 6:
+//            case 7:
+//                return 0.4;
+//            case 8:
+//            case 9:
+//            case 10:
+//                return -0.4;
+//            case 11:
+//            case 12:
+//            case 13:
+//            case 14:
+//            case 15:
+//                return -0.5;
+//            case 16:
+//            case 17:
+//            case 18:
+//            case 19:
+//            case 20:
+//                return -1;
+        if(vegetation <= 200 || vegetation >= 331){
+            return -1;
         }
-        return 0;
+        else if (vegetation <= 300) {
+            return -0.4;
+        }
+        else {
+            return 0.4;
+        }
     }
 
     @Override

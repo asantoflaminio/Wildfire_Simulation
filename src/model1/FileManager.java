@@ -190,8 +190,8 @@ public class FileManager {
         BufferedReader elevR = new BufferedReader(new FileReader(elevPath));
         BufferedReader densR = new BufferedReader(new FileReader(densPath));
         BufferedReader vegR = new BufferedReader(new FileReader(vegPath));
-        int w = 2206;
-        int h = 1549;
+        int w = 309;//271;// 120;//2206;
+        int h = 276;//224;// 47;//1549;
         Forest forest = new Forest(w, h);
         Cell[][] cells = new Cell[w][h];
         for (int j = 0; j < h; j++){
@@ -200,9 +200,9 @@ public class FileManager {
             String[] veg = vegR.readLine().split(" ");
             for (int i = 0; i < w; i++) {
                 int state = 2;
-                if(Double.valueOf(veg[i]) >= 16.0)
+                if(Double.valueOf(veg[i]) <= 142.0 || Double.valueOf(veg[i]) >= 331)
                     state = 1;
-                cells[i][h-j-1] = new Cell(i,h-j-1,state,Double.valueOf(veg[i]).intValue(),Double.valueOf(dens[i]).intValue(),Double.valueOf(elev[i]),500.0);
+                cells[i][h-j-1] = new Cell(i,h-j-1,state,Double.valueOf(veg[i]).intValue(),Double.valueOf(dens[i]).intValue(),Double.valueOf(elev[i]),100.0);
             }
         }
 
