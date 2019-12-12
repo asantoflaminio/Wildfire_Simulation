@@ -4,11 +4,13 @@ import utils.Cell;
 import utils.Forest;
 
 import java.io.*;
+import java.util.Map;
 
 public class FileManager {
 
     BufferedWriter bwDensity;
     BufferedWriter bwElevation;
+    BufferedWriter bwBurnedCells;
     static int AMAZON_HEIGHT = 1323;
     static int AMAZON_WIDTH = 1304;
     int TAVIRA_HEIGHT = 276;
@@ -20,6 +22,8 @@ public class FileManager {
             bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", true));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", false));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", true));
+            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells.txt", false));
+            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells.txt", true));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,6 +166,21 @@ public class FileManager {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+        if (bwBurnedCells != null) try {
+            bwBurnedCells.flush();
+            bwBurnedCells.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void printBurnedCells(Map<Double, Integer> burnedCells) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        for(Double d: burnedCells.keySet()) {
+            builder.append(d + " " + burnedCells.get(d));
+            builder.append("\r\n");
+        }
+        bwBurnedCells.write(builder.toString());
     }
 
     /*

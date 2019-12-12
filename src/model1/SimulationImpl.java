@@ -8,6 +8,8 @@ import utils.Simulation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class SimulationImpl implements Simulation {
@@ -45,20 +47,22 @@ public class SimulationImpl implements Simulation {
     private static int equivalents[][] = {{1,2}, {0,2}, {0,1}, {0,0}, {1,0}, {2,0}, {2,1}, {2,2}};
 
     private int totalBurnedCells;
+    Map<Double, Integer> burnedCells;
     private int iterations;
 
     SimulationImpl(long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
        // this.forest = initializeForest(forestWidth,forestHeight);
-      // this.forest = FileManager.readTerrain(forestPath);
-        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\elev.txt";
-        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\dens.txt";
-        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
-        this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
+       this.forest = FileManager.readTerrain(forestPath);
+//        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\elev.txt";
+//        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\dens.txt";
+//        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
+//        this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
         totalBurnedCells = 0;
+        burnedCells = new TreeMap<>();
         iterations = 0;
         System.out.println("Forest initialized.");
        // printForest();
@@ -94,6 +98,7 @@ public class SimulationImpl implements Simulation {
 
 //        for (double i = 0; i < totalTime; i += timeStep) {
         double i = 0.0;
+        burnedCells.put(i, totalBurnedCells);
         while(forestOnFire) {
             i += timeStep;
            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
@@ -101,11 +106,13 @@ public class SimulationImpl implements Simulation {
             fm.printForestForAnimation(this.forest);
             iterations++;
             calculateFireEvolution();
+            burnedCells.put(i, totalBurnedCells);
             //if new cell has been burnt, save state to be animated
         }
 
         System.out.println("Total burned cells: " + totalBurnedCells);
         System.out.println("Burned cells per dt (average): " + (double)totalBurnedCells/(double)iterations);
+        fm.printBurnedCells(burnedCells);
         fm.printForestForAnimation(this.forest);
         fm.close();
     }

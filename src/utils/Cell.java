@@ -45,28 +45,28 @@ public class Cell{
     }
 
     public double getPDen() {
-//        switch (density) {
-//            case 1:
-//                return -0.4;
-//            case 2:
-//                return 0;
-//            case 3:
-//                return 0.3;
-//        }
-//        return -0.4;
+        switch (density) {
+            case 1:
+                return -0.4;
+            case 2:
+                return 0;
+            case 3:
+                return 0.3;
+        }
+        return -0.4;
         /*Tavira and Amazonas*/
-        if(density >= 10 && density <= 40){
-            return -0.3;
-        }
-        else if(density <= 80) {
-            return 0;
-        }
-        else if (density <= 100){
-            return 0.3;
-        }
-        else {
-            return -1;
-        }
+//        if(density >= 10 && density <= 40){
+//            return -0.3;
+//        }
+//        else if(density <= 80) {
+//            return 0;
+//        }
+//        else if (density <= 100){
+//            return 0.3;
+//        }
+//        else {
+//            return -1;
+//        }
     }
 
     public void setDensity(int density) {
@@ -114,44 +114,44 @@ public class Cell{
     }
 
     public double getPVeg() {
-//        switch (vegetation) {
-//            case 1:
-//                return -0.3;
-//            case 2:
-//                return 0;
-//            case 3:
-//                return 0.4;
-//
-//        }
-//        return 0;
-        /*Amazonas GlobalMap*/
         switch (vegetation) {
             case 1:
+                return -0.3;
             case 2:
+                return 0;
             case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
                 return 0.4;
-            case 8:
-            case 9:
-            case 10:
-                return -0.4;
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-                return -0.5;
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-                return -1;
+
         }
         return 0;
+        /*Amazonas GlobalMap*/
+//        switch (vegetation) {
+//            case 1:
+//            case 2:
+//            case 3:
+//            case 4:
+//            case 5:
+//            case 6:
+//            case 7:
+//                return 0.4;
+//            case 8:
+//            case 9:
+//            case 10:
+//                return -0.4;
+//            case 11:
+//            case 12:
+//            case 13:
+//            case 14:
+//            case 15:
+//                return -0.5;
+//            case 16:
+//            case 17:
+//            case 18:
+//            case 19:
+//            case 20:
+//                return -1;
+//        }
+//        return 0;
 
         /*Tavira Copernicus*/
 //        if(vegetation <= 200 || vegetation >= 331){
