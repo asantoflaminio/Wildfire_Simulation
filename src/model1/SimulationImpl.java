@@ -52,9 +52,9 @@ public class SimulationImpl implements Simulation {
         this.timeStep = timeStep;
        // this.forest = initializeForest(forestWidth,forestHeight);
       // this.forest = FileManager.readTerrain(forestPath);
-        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\elev.txt";
-        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\dens.txt";
-        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\veg.txt";
+        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\elev.txt";
+        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\dens.txt";
+        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
         this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
@@ -212,7 +212,7 @@ public class SimulationImpl implements Simulation {
     private Pair<Integer, Integer> calculateBlastLandingCell(Cell from, double blastAngle, double blastDistance) {
         int x = from.getX() + (int) (blastDistance * Math.cos(Math.toRadians(blastAngle)));
         int y = from.getY() + (int) (blastDistance * Math.sin(Math.toRadians(blastAngle)));
-        return new Pair<Integer, Integer>(x,y);
+        return new Pair<>(x,y);
     }
 
     private void clearForest() {
