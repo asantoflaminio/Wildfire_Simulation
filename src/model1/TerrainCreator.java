@@ -94,6 +94,26 @@ public class TerrainCreator {
     }
 
     /*
+    Terreno inclinado.
+     */
+    public static void slopeSquare(int max) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("terrains/slopeSquare" + max + ".txt", true));
+        StringBuilder builder = new StringBuilder().append(500 + "\r\n").append(500 + "\r\n");
+        double maxD = (double) max;
+        for(int i = 0; i < 500; i++) {
+            for(int j = 0; j < 500; j++) {
+                double elev = max/499.0 * i;
+                builder.append(i + " " + j + " " + "2.0" + " " + "2" + " " + "3" + " " + elev + " " + "1.0" + "\r\n");
+            }
+        }
+
+        bw.write(builder.toString());
+        bw.flush();
+        bw.close();
+        System.out.println("Slope square terrain created.");
+    }
+
+    /*
        500 width
        500 height
        Elevacion intercalada
