@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public interface Simulation {
 
-    void runSimulation() throws IOException;
-
+    void runSimulationBase() throws IOException;
+    void runSimulationReal() throws IOException;
     void calculateFireEvolution();
 
 }
