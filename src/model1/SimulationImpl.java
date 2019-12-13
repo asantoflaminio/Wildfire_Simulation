@@ -32,7 +32,8 @@ public class SimulationImpl implements Simulation {
     private static double c2 = 0.131;
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
-    static boolean spottingActivated = true;
+    static boolean spottingActivated = false;
+    private double pc0 = 0.25;
 
     private static double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
     private static double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
@@ -165,7 +166,7 @@ public class SimulationImpl implements Simulation {
                          */
                         int Np = 0;
                         if(spottingActivated) {
-                            Np = ((int)Math.random())*5 + 1; // se desprenden entre 1 y 5 ramas
+                            Np = (int) Math.floor(Math.random() * 5) + 1 ; // se desprenden entre 1 y 5 ramas
                         }
 
                         while(Np > 0) {
@@ -191,7 +192,6 @@ public class SimulationImpl implements Simulation {
 
                                 if(blastCell.getState() == 2D) {
                                     // pc0 = probabilty that a cell will catch on fire by spotting
-                                    double pc0 = 0.25;
                                     // correct it by vegetation density and type
                                     double pc = pc0 * (1 + current.getPDen()) * (1 + current.getVegetation());
                                     if(Math.random() < pc) {
