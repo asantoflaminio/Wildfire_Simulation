@@ -17,11 +17,8 @@ public class SimulationImpl implements Simulation {
     private long totalTime;
     private double timeStep;
     private Forest forest;
-    /*
-    Usemos siempre celdas de 1x1 porque sino tenemos que cambiar el tema
-    de initializeForest etc.
-     */
-    private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
+
+    private static double SQUARE_LENGTH = 100.0;
     FileManager fm;
     private boolean forestOnFire = true;
 
@@ -32,33 +29,38 @@ public class SimulationImpl implements Simulation {
     private static double c2 = 0.131;
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
-    static boolean spottingActivated = true;
+    private static boolean spottingActivated = true;
+    private double pc0 = 0.35;
 
-    private static double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
-    private static double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
-    private static double northWestMatrix[][] = {{0.0, 45.0, 90.0}, {45.0, 0.0, 135.0}, {90.0, 135.0, 180.0}};
-    private static double southMatrix[][] = {{135.0, 180.0, 135.0}, {90.0, 0.0, 90.0}, {45.0, 0.0, 45.0}};
-    private static double southEastMatrix[][] = {{180.0, 135.0, 90.0}, {135.0, 0.0, 45.0}, {90.0, 45.0, 0.0}};
-    private static double southWestMatrix[][] = {{90.0, 135.0, 180.0}, {45.0, 0.0, 135.0}, {0.0, 45.0, 90.0}};
-    private static double eastMatrix[][] = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
-    private static double westMatrix[][] = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
+    private static double[][] northMatrix = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
+    private static double[][] northEastMatrix = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
+    private static double[][] northWestMatrix = {{0.0, 45.0, 90.0}, {45.0, 0.0, 135.0}, {90.0, 135.0, 180.0}};
+    private static double[][] southMatrix = {{135.0, 180.0, 135.0}, {90.0, 0.0, 90.0}, {45.0, 0.0, 45.0}};
+    private static double[][] southEastMatrix = {{180.0, 135.0, 90.0}, {135.0, 0.0, 45.0}, {90.0, 45.0, 0.0}};
+    private static double[][] southWestMatrix = {{90.0, 135.0, 180.0}, {45.0, 0.0, 135.0}, {0.0, 45.0, 90.0}};
+    private static double[][] eastMatrix = {{135.0, 90.0, 45.0}, {180.0, 0.0, 0.0}, {135.0, 90.0, 45.0}};
+    private static double[][] westMatrix = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
-    private static double blastAngles[] = {0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0};
-    private static int equivalents[][] = {{1,2}, {0,2}, {0,1}, {0,0}, {1,0}, {2,0}, {2,1}, {2,2}};
+    private static double[] blastAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0};
+    private static int[][] equivalents = {{1, 2}, {0, 2}, {0, 1}, {0, 0}, {1, 0}, {2, 0}, {2, 1}, {2, 2}};
 
     private int totalBurnedCells;
-    Map<Double, Integer> burnedCells;
+    private Map<Double, Integer> burnedCells;
     private int iterations;
 
-    SimulationImpl(long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
+    SimulationImpl(boolean real, long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
-       // this.forest = initializeForest(forestWidth,forestHeight);
-       this.forest = FileManager.readTerrain(forestPath);
-//        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\elev.txt";
-//        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\dens.txt";
-//        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
-//        this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
+        if(real) {
+            String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\elev.txt";
+            String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\dens.txt";
+            String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\tavira\\copernicus\\copernicus2\\veg.txt";
+            this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
+        }
+        else {
+           this.forest = FileManager.readTerrain(forestPath);
+        }
+
         this.forest.getCell(fireStartX,fireStartY).setState(3);
         fm = new FileManager(filepath);
         totalBurnedCells = 0;
@@ -96,10 +98,9 @@ public class SimulationImpl implements Simulation {
     public void runSimulation() throws IOException {
 
 
-//        for (double i = 0; i < totalTime; i += timeStep) {
-        double i = 0.0;
+        for (double i = 0; i < totalTime; i += timeStep) {
         burnedCells.put(i, totalBurnedCells);
-        while(forestOnFire) {
+//        while(forestOnFire) {
             i += timeStep;
            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
 //            printForest();
@@ -165,7 +166,7 @@ public class SimulationImpl implements Simulation {
                          */
                         int Np = 0;
                         if(spottingActivated) {
-                            Np = ((int)Math.random())*5 + 1; // se desprenden entre 1 y 5 ramas
+                            Np = (int) Math.floor(Math.random() * 5) + 1 ; // se desprenden entre 1 y 5 ramas
                         }
 
                         while(Np > 0) {
@@ -191,7 +192,6 @@ public class SimulationImpl implements Simulation {
 
                                 if(blastCell.getState() == 2D) {
                                     // pc0 = probabilty that a cell will catch on fire by spotting
-                                    double pc0 = 0.25;
                                     // correct it by vegetation density and type
                                     double pc = pc0 * (1 + current.getPDen()) * (1 + current.getVegetation());
                                     if(Math.random() < pc) {
@@ -230,33 +230,6 @@ public class SimulationImpl implements Simulation {
         }
     }
 
-    private void calculateStatesForNeighbours(int x, int y, Forest newForest) {
-//        ArrayList<Cell> neighbours = new ArrayList<>();
-//        //  | x-1, y-1 | x, y-1 | x+1, y-1 |
-//        //  | x-1, y   | x, y   | x+1, y   |
-//        //  | x-1, y+1 | x, y+1 | x+1, y+1 |
-//
-//        neighbours.add(this.forest.getCell(x-1,y-1));
-//        neighbours.add(this.forest.getCell(x,y-1));
-//        neighbours.add(this.forest.getCell(x+1,y-1));
-//        neighbours.add(this.forest.getCell(x-1,y));
-//        neighbours.add(this.forest.getCell(x+1,y));
-//        neighbours.add(this.forest.getCell(x-1,y+1));
-//        neighbours.add(this.forest.getCell(x,y+1));
-//        neighbours.add(this.forest.getCell(x+1,y+1));
-//
-//        for (Cell c: neighbours) {
-//            int cellX = c.getX();
-//            int cellY = c.getY();
-//            if(cellX >= 0 && cellY >= 0 && cellX < this.forest.getWidth() && cellY < this.forest.getHeight()) {
-//                if( Math.random() < 0.78) { //TODO pburn
-//                    Cell n = newForest.getCell(cellX, cellY);
-//                    n.setState(3d);
-//                    n.setSpreadInto(true);
-//                }
-//            }
-//        }
-    }
 
     private void printForest() {
         for (int i = 0; i < this.forest.getHeight(); i++) {
@@ -301,7 +274,7 @@ public class SimulationImpl implements Simulation {
         return Math.exp(c1*windSpeed)*ft;
     }
 
-    double getWindAngle(int row, int column) {
+    private double getWindAngle(int row, int column) {
         double angle;
         switch(windDirection) {
             case NORTH:

@@ -13,8 +13,8 @@ public class FileManager {
     BufferedWriter bwBurnedCells;
     static int AMAZON_HEIGHT = 1323;
     static int AMAZON_WIDTH = 1304;
-    int TAVIRA_HEIGHT = 276;
-    int TAVIRA_WIDTH = 309;
+    static int TAVIRA_HEIGHT = 276;
+    static int TAVIRA_WIDTH = 309;
 
     public FileManager(String path) {
         try {
@@ -22,8 +22,8 @@ public class FileManager {
             bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", true));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", false));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", true));
-            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells.txt", false));
-            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells.txt", true));
+            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells1.txt", false));
+            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells1.txt", true));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -213,8 +213,8 @@ public class FileManager {
         BufferedReader elevR = new BufferedReader(new FileReader(elevPath));
         BufferedReader densR = new BufferedReader(new FileReader(densPath));
         BufferedReader vegR = new BufferedReader(new FileReader(vegPath));
-        int w = AMAZON_WIDTH;
-        int h = AMAZON_HEIGHT;
+        int w = TAVIRA_WIDTH;
+        int h = TAVIRA_HEIGHT;
         Forest forest = new Forest(w, h);
         Cell[][] cells = new Cell[w][h];
         for (int j = 0; j < h; j++){
@@ -224,12 +224,12 @@ public class FileManager {
             for (int i = 0; i < w; i++) {
                 int state = 2;
                 /*Tavira Copernicus*/
-                /*if(Double.valueOf(veg[i]) <= 142.0 || Double.valueOf(veg[i]) >= 331)
+                if(Double.valueOf(veg[i]) <= 142.0 || Double.valueOf(veg[i]) >= 331)
                     state = 1;
-                */
+
                 /*Amazonas GlobalMap*/
-                if(Double.valueOf(veg[i]) >=16)
-                    state = 1;
+//                if(Double.valueOf(veg[i]) >=16)
+//                    state = 1;
                 cells[i][h-j-1] = new Cell(i,h-j-1,state,Double.valueOf(veg[i]).intValue(),Double.valueOf(dens[i]).intValue(),Double.valueOf(elev[i]),100.0);
             }
         }
