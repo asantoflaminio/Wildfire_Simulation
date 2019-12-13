@@ -4,39 +4,46 @@ x = input1(:,1);
 y = input1(:,2); %fraccion de particulas
 plot(x,y, "marker", 'o',"linestyle", "-", "color", "m", "linewidth", 1);
 hold on;
-xo = x(end/2 + 1/2); %valor del medio
-
+xo = x(end/2 + 1 + 1/2); %valor del medio
 
 ending = x(end);
 t = x;
-finalvalue = y(end);
-k = (0.01:0.0001:1.0);
+finalindex = find(y == max(y));
+finalvalue = y(finalindex);
+k = (0.15:0.0001:0.22);
 
 for i=1:length(k)
-  for j = 1:length(t)
+  for j = 1:length(t) 
      f(i,j) = finalvalue/ (1 + exp(-k(i)*(t(j)-xo))); 
   endfor
 endfor
 
+
+for i=1:length(k)
+  subst = f(i,1);
+  for j = 1:length(t) 
+     f(i,j) = f(i,j) - subst; 
+  endfor
+endfor
+
 error = 0; 
-% for externo, me va a agarrar la fila del 'm' correspondiente en 'y'
 for i = 1:length(k)
   c = f(i,:);
-  %ahora voy a recorrer y tomar los valores de 'd'
   for j = 1:length(t)
    error += (y(j) - c(j))^2;
-   error
+   %error
   endfor
-  e(i,1) = error;
+  e(i) = error;
   error = 0;
 endfor
 
-
+length(e)
 for i = 1:length(k)
   index = find(e == min(e));
   plot(x,f(index,:),'b-')
 hold on
 endfor
+k(index)
 
 set (gca, "xgrid", "on");
 set (gca, "ygrid", "on");
