@@ -17,11 +17,8 @@ public class SimulationImpl implements Simulation {
     private long totalTime;
     private double timeStep;
     private Forest forest;
-    /*
-    Usemos siempre celdas de 1x1 porque sino tenemos que cambiar el tema
-    de initializeForest etc.
-     */
-    private static double SQUARE_LENGTH = 1.0; // vamos a tener celdas de 1mx1m
+
+    private static double SQUARE_LENGTH = 1.0;
     private FileManager fm;
     private boolean forestOnFire = true;
 
@@ -31,7 +28,7 @@ public class SimulationImpl implements Simulation {
     private static double c1 = 0.045;
     private static double c2 = 0.131;
     private double windSpeed = 10; // m/s
-    private WindEnum windDirection = WindEnum.NORTH;
+    private WindEnum windDirection = WindEnum.EAST;
     static boolean spottingActivated = false;
     private double pc0 = 0.25;
 
