@@ -23,7 +23,7 @@ public class SimulationImpl implements Simulation {
     private boolean forestOnFire = true;
 
     /* Variables */
-    private static double Ph = 0.58;// probability constant
+    private static double Ph;// probability constant
     private static double a = 0.078;
     private static double c1 = 0.045;
     private static double c2 = 0.131;
@@ -48,10 +48,11 @@ public class SimulationImpl implements Simulation {
     private Map<Double, Integer> burnedCells;
     private int iterations;
 
-    SimulationImpl(boolean real, long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
+    SimulationImpl(double k, int num, boolean real, long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
-        fm = new FileManager(filepath);
+        Ph = k;
+        fm = new FileManager(filepath, String.valueOf(k), String.valueOf(num));
         totalBurnedCells = 0;
         burnedCells = new TreeMap<>();
         iterations = 0;
@@ -61,13 +62,12 @@ public class SimulationImpl implements Simulation {
             String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
             this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
             this.forest.getCell(fireStartX,fireStartY).setState(3);
-            System.out.println("Forest initialized.");
+            System.out.println("Forest initialized.ph= "+ k + " num=" + num);
             runSimulationReal();
        } else {
             this.forest = FileManager.readTerrain(forestPath);
             this.forest.getCell(fireStartX,fireStartY).setState(3);
-
-            System.out.println("Forest initialized.");
+            System.out.println("Forest initialized.ph= "+ k + " num=" + num);
             runSimulationBase();
         }
 
@@ -102,8 +102,8 @@ public class SimulationImpl implements Simulation {
         burnedCells.put(i, totalBurnedCells);
         while(forestOnFire) {
             i += timeStep;
-           System.out.println("---------------------- Forest at time: "+i+" ----------------------");
-            fm.printForestForAnimation(this.forest);
+//           System.out.println("---------------------- Forest at time: "+i+" ----------------------");
+//            fm.printForestForAnimation(this.forest);
             iterations++;
             calculateFireEvolution();
             burnedCells.put(i, totalBurnedCells);
@@ -111,7 +111,7 @@ public class SimulationImpl implements Simulation {
         System.out.println("Total burned cells: " + totalBurnedCells);
         System.out.println("Burned cells per dt (average): " + (double)totalBurnedCells/(double)iterations);
         fm.printBurnedCells(burnedCells);
-        fm.printForestForAnimation(this.forest);
+//        fm.printForestForAnimation(this.forest);
         fm.close();
     }
 

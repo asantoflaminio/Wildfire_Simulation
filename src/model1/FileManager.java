@@ -16,14 +16,14 @@ public class FileManager {
     static int TAVIRA_HEIGHT = 276;
     static int TAVIRA_WIDTH = 309;
 
-    public FileManager(String path) {
+    public FileManager(String path, String ph, String num) {
         try {
-            bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", false));
+            bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density_"+ph+"_"+num+".txt", false));
             bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", true));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", false));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", true));
-            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells.txt", false));
-            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells.txt", true));
+            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells_"+ph+"_"+num+".txt", false));
+            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells_"+ph+"_"+num+".txt", true));
         } catch (IOException e) {
             e.printStackTrace();
         }

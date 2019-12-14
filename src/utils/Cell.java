@@ -45,15 +45,15 @@ public class Cell{
     }
 
     public double getPDen() {
-        switch (density) {
-            case 1:
-                return -0.4;
-            case 2:
-                return 0;
-            case 3:
-                return 0.3;
-        }
-        return -0.4;
+//        switch (density) {
+//            case 1:
+//                return -0.4;
+//            case 2:
+//                return 0;
+//            case 3:
+//                return 0.3;
+//        }
+        return 0.0;
         /*Tavira and Amazonas*/
 //        if(density >= 10 && density <= 40){
 //            return -0.3;
@@ -114,15 +114,15 @@ public class Cell{
     }
 
     public double getPVeg() {
-        switch (vegetation) {
-            case 1:
-                return -0.3;
-            case 2:
-                return 0;
-            case 3:
-                return 0.4;
-
-        }
+//        switch (vegetation) {
+//            case 1:
+//                return -0.3;
+//            case 2:
+//                return 0;
+//            case 3:
+//                return 0.4;
+//
+//        }
         return 0;
         /*Amazonas GlobalMap*/
 //        switch (vegetation) {
