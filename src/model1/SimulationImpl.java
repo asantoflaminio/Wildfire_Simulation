@@ -326,7 +326,7 @@ public class SimulationImpl implements Simulation {
             /*
             Case 1: Adjacent
              */
-            if((evaluatedCell.getX() == burningCell.getX()) && (evaluatedCell.getY() == burningCell.getY())) {
+            if((evaluatedCell.getX() == burningCell.getX()) || (evaluatedCell.getY() == burningCell.getY())) {
                angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/SQUARE_LENGTH);
             } else {
             /*
