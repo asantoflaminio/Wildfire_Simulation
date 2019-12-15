@@ -17,7 +17,6 @@ public class SimulationImpl implements Simulation {
     private long totalTime;
     private double timeStep;
     private Forest forest;
-
     private static double SQUARE_LENGTH = 1.0;
     private FileManager fm;
     private boolean forestOnFire = true;
@@ -27,10 +26,10 @@ public class SimulationImpl implements Simulation {
     private static double a = 0.078;
     private static double c1 = 0.045;
     private static double c2 = 0.131;
-    private double windSpeed = 10; // m/s
-    private WindEnum windDirection = WindEnum.EAST;
-    static boolean spottingActivated = false;
-    private double pc0 = 0.25;
+    private double windSpeed = 8; // m/s
+    private WindEnum windDirection = WindEnum.NORTH;
+    static boolean spottingActivated = true;
+    private double pc0 = 0.50;
 
     private static double[][] northMatrix = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
     private static double[][] northEastMatrix = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
@@ -42,7 +41,9 @@ public class SimulationImpl implements Simulation {
     private static double[][] westMatrix = {{45.0, 90.0, 135.0}, {0.0, 0.0, 180.0}, {45.0, 90.0, 135.0}};
 
     private static double[] blastAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0};
+    private static double[] auxAngles = {0.0, 45.0, 90.0, 135.0, 180.0, 45.0, 90.0, 135.0};
     private static int[][] equivalents = {{1,2}, {0,2}, {0,1}, {0,0}, {1,0}, {2,0}, {2,1}, {2,2}};
+
 
     private int totalBurnedCells;
     private Map<Double, Integer> burnedCells;
@@ -63,7 +64,7 @@ public class SimulationImpl implements Simulation {
             this.forest.getCell(fireStartX,fireStartY).setState(3);
             System.out.println("Forest initialized.");
             runSimulationReal();
-       } else {
+        } else {
             this.forest = FileManager.readTerrain(forestPath);
             this.forest.getCell(fireStartX,fireStartY).setState(3);
 
@@ -102,7 +103,7 @@ public class SimulationImpl implements Simulation {
         burnedCells.put(i, totalBurnedCells);
         while(forestOnFire) {
             i += timeStep;
-           System.out.println("---------------------- Forest at time: "+i+" ----------------------");
+            System.out.println("---------------------- Forest at time: "+i+" ----------------------");
             fm.printForestForAnimation(this.forest);
             iterations++;
             calculateFireEvolution();
@@ -118,7 +119,7 @@ public class SimulationImpl implements Simulation {
     @Override
     public void runSimulationReal() throws IOException {
         for (double i = 0; i < totalTime; i += timeStep) {
-        burnedCells.put(i, totalBurnedCells);
+            burnedCells.put(i, totalBurnedCells);
             i += timeStep;
             System.out.println("---------------------- Forest at time: "+i+" ----------------------");
             fm.printForestForAnimation(this.forest);
@@ -184,22 +185,40 @@ public class SimulationImpl implements Simulation {
 
                         while(Np > 0) {
                             Np--;
-                            int rn = (int)((Math.random())*10 + 1); // no dice mucho de este numero, solo q es random
+                            int rn = (int)((Math.random())*50 + 1); // no dice mucho de este numero, solo q es random
 
-                            int aux = (int) (Math.random() * 7);
+                            int aux = (int) (Math.random() * 8); //entre 0 y 7
                             double blastAngle = blastAngles[aux]; // entre 0 y 360
-                            //System.out.println("Blastangle es " + blastAngle);
+                            double windAngle;// = getWindAngle(equivalents[aux][0], equivalents[aux][1]);
+                            switch(windDirection) {
+                                case NORTH: windAngle = 270.0;
+                                    break;
+                                case NORTHEAST: windAngle = 315.0;
+                                    break;
+                                case NORTHWEST: windAngle = 225.0;
+                                    break;
+                                case WEST: windAngle = 180.0;
+                                    break;
+                                case EAST: windAngle = 0.0;
+                                    break;
+                                case SOUTH: windAngle = 90.0;
+                                    break;
+                                case SOUTHEAST: windAngle = 45.0;
+                                    break;
+                                case SOUTHWEST: windAngle = 135.0;
+                                    break;
+                                default: throw new RuntimeException("Something went wrong");
 
-                            double windAngle = getWindAngle(equivalents[aux][0], equivalents[aux][1]);
-                            double blastDistance = rn * Math.exp(windSpeed*c2*(Math.cos(Math.toRadians(windAngle - blastAngle)) - 1));
-                            //System.out.println("Blastdistance es " + blastDistance);
+                            }
+                            double difference = Math.abs(windAngle - blastAngle);
+                            double blastDistance = rn * Math.exp(windSpeed*c2*(Math.cos(Math.toRadians(difference)) - 1));
                             Pair<Integer, Integer> blastCellCoordinates = calculateBlastLandingCell(current, blastAngle, blastDistance);
 
                             /*
                             Chequear si cae dentro de la forest
                              */
                             if(blastCellCoordinates.getKey() >= 0 && blastCellCoordinates.getValue() >=0
-                            && blastCellCoordinates.getKey() < this.forest.getWidth() && blastCellCoordinates.getValue() < this.forest.getHeight()) {
+                                    && blastCellCoordinates.getKey() < this.forest.getWidth() && blastCellCoordinates.getValue() < this.forest.getHeight()) {
 
                                 Cell blastCell = newForest.getCell(blastCellCoordinates.getKey(), blastCellCoordinates.getValue());
 
@@ -230,8 +249,10 @@ public class SimulationImpl implements Simulation {
     }
 
     private Pair<Integer, Integer> calculateBlastLandingCell(Cell from, double blastAngle, double blastDistance) {
+//        System.out.println("blastangle era " + blastAngle);
         int x = from.getX() + (int) (blastDistance * Math.cos(Math.toRadians(blastAngle)));
         int y = from.getY() + (int) (blastDistance * Math.sin(Math.toRadians(blastAngle)));
+//        System.out.println("Va de celda [" + from.getX() + ", " + from.getY() + "] a [" + x + ", " + y + "]");
         return new Pair<>(x,y);
     }
 
@@ -326,14 +347,14 @@ public class SimulationImpl implements Simulation {
             /*
             Case 1: Adjacent
              */
-            if((evaluatedCell.getX() == burningCell.getX()) || (evaluatedCell.getY() == burningCell.getY())) {
-               angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/SQUARE_LENGTH);
-            } else {
+        if((evaluatedCell.getX() == burningCell.getX()) || (evaluatedCell.getY() == burningCell.getY())) {
+            angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/SQUARE_LENGTH);
+        } else {
             /*
             Case 2: Diagonal
              */
-                angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/(Math.sqrt(2)*SQUARE_LENGTH));
-            }
+            angle = Math.atan((evaluatedCell.getElevation() - burningCell.getElevation())/(Math.sqrt(2)*SQUARE_LENGTH));
+        }
 
         return Math.exp(a*angle);
     }
