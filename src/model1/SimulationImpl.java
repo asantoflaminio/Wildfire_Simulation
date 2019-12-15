@@ -186,8 +186,9 @@ public class SimulationImpl implements Simulation {
                         while(Np > 0) {
                             Np--;
                             int rn = (int)((Math.random())*50 + 1); // no dice mucho de este numero, solo q es random
-                            rn = 50;
-                            int aux = 7;// (int) (Math.random() * 8); //entre 0 y 7
+//                            rn = 50;
+                            int aux = (int) (Math.random() * 8); //entre 0 y 7
+                           // int aux = 7;//
                             double blastAngle = blastAngles[aux]; // entre 0 y 360
                             double windAngle;// = getWindAngle(equivalents[aux][0], equivalents[aux][1]);
                             switch(windDirection) {
@@ -212,9 +213,9 @@ public class SimulationImpl implements Simulation {
                             }
                             double difference = Math.abs(windAngle - blastAngle);
                             double blastDistance = rn * Math.exp(windSpeed*c2*(Math.cos(Math.toRadians(difference)) - 1));
-                            System.out.println("blastangle " + blastAngle + "& windangle " + windAngle + ": blastDistance--> " + blastDistance);
+                           // System.out.println("blastangle " + blastAngle + "& windangle " + windAngle + ": blastDistance--> " + blastDistance);
                             Pair<Integer, Integer> blastCellCoordinates = calculateBlastLandingCell(current, blastAngle, blastDistance);
-                            System.out.println("ACA es [" + blastCellCoordinates.getKey() + ", " + blastCellCoordinates.getValue() + "]");
+                            //System.out.println("ACA es [" + blastCellCoordinates.getKey() + ", " + blastCellCoordinates.getValue() + "]");
                             /*
                             Chequear si cae dentro de la forest
                              */
@@ -230,9 +231,9 @@ public class SimulationImpl implements Simulation {
                                     if(Math.random() < pc) {
                                         //System.out.println("INCENDIO");
                                         newForest.getCell(blastCell.getX(), blastCell.getY()).setState(3D);
-                                        System.out.println("Spotting ocurred from cell [" + current.getX()
-                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
-                                                blastCell.getY() + "].");
+//                                        System.out.println("Spotting ocurred from cell [" + current.getX()
+//                                        + ", " + current.getY() + "] to cell [" + blastCell.getX() + ", " +
+//                                                blastCell.getY() + "].");
                                     }
                                 }
                             }
