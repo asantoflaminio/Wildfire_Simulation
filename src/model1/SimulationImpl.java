@@ -32,7 +32,7 @@ public class SimulationImpl implements Simulation {
     private static double c2 = 0.131;
     private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
-    static boolean spottingActivated = true;
+    static boolean spottingActivated = false;
 
     private static double northMatrix[][] = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
     private static double northEastMatrix[][] = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
@@ -49,23 +49,25 @@ public class SimulationImpl implements Simulation {
     private int totalBurnedCells;
     Map<Double, Integer> burnedCells;
     private int iterations;
+    private double pDen;
 
-    SimulationImpl(long totalTime, double timeStep, String forestPath,  int fireStartX, int fireStartY, String filepath) throws IOException {
+    SimulationImpl(long totalTime, double timeStep, String forestPath, int fireStartX, int fireStartY, String filepath, double pDen) throws IOException {
         this.totalTime = totalTime;
         this.timeStep = timeStep;
        // this.forest = initializeForest(forestWidth,forestHeight);
-       this.forest = FileManager.readTerrain(forestPath);
+       this.forest = FileManager.readTerrain(forestPath, pDen);
 //        String elev = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\elev.txt";
 //        String dens = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\dens.txt";
 //        String veg = "C:\\Users\\Constanza\\Documents\\ITBA\\Wildfire Simulation\\terrains\\amazonas\\smaller\\veg.txt";
 //        this.forest = FileManager.readTerrainFromMultiple(elev,dens,veg);
         this.forest.getCell(fireStartX,fireStartY).setState(3);
-        fm = new FileManager(filepath);
+        fm = new FileManager(filepath, pDen);
         totalBurnedCells = 0;
         burnedCells = new TreeMap<>();
         iterations = 0;
         System.out.println("Forest initialized.");
        // printForest();
+        this.pDen = pDen;
     }
 
 
@@ -75,7 +77,7 @@ public class SimulationImpl implements Simulation {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 //TODO read from parser
-                Cell cell = new Cell(i, j, 2d, 1, 2, 0, SQUARE_LENGTH);
+                Cell cell = new Cell(i, j, 2d, 1, 2, 0, SQUARE_LENGTH, pDen);
                 forest.getForest()[i][j] = cell;
             }
         }
@@ -86,7 +88,7 @@ public class SimulationImpl implements Simulation {
         for (int i = 0; i < previousForest.getWidth(); i++) {
             for (int j = 0; j < previousForest.getHeight(); j++) {
                 Cell cell = new Cell(i, j, previousForest.getCell(i,j).getState(), previousForest.getCell(i,j).getVegetation(), previousForest.getCell(i,j).getDensity(),
-                        previousForest.getCell(i,j).getElevation(), SQUARE_LENGTH);
+                        previousForest.getCell(i,j).getElevation(), SQUARE_LENGTH, pDen);
                 forest.getForest()[i][j] = cell;
             }
         }

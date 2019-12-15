@@ -1,7 +1,5 @@
 package utils;
 
-import model1.StateEnum;
-
 public class Cell{
     private double state;
     private int x,y;
@@ -11,9 +9,9 @@ public class Cell{
     private double elevation;
     private double squareLength;
     private boolean spreadInto;
+    private double pDen;
 
-
-    public Cell(int x, int y, double initialState, int vegetation, int density, double elevation, double squareLength) {
+    public Cell(int x, int y, double initialState, int vegetation, int density, double elevation, double squareLength, double pDen) {
         this.state = initialState;
         this.x = x;
         this.y = y;
@@ -22,6 +20,7 @@ public class Cell{
         this.elevation = elevation;
         this.squareLength = squareLength;
         this.spreadInto = false;
+        this.pDen = pDen;
     }
 
     public double getSquareLength() {
@@ -45,15 +44,7 @@ public class Cell{
     }
 
     public double getPDen() {
-        switch (density) {
-            case 1:
-                return -0.4;
-            case 2:
-                return 0;
-            case 3:
-                return 0.3;
-        }
-        return -0.4;
+        return pDen;
         /*Tavira and Amazonas*/
 //        if(density >= 10 && density <= 40){
 //            return -0.3;

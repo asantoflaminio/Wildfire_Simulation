@@ -15,15 +15,17 @@ public class FileManager {
     static int AMAZON_WIDTH = 1304;
     int TAVIRA_HEIGHT = 276;
     int TAVIRA_WIDTH = 309;
+    double pDen;
 
-    public FileManager(String path) {
+    public FileManager(String path, double pDen) {
+       this.pDen = pDen;
         try {
             bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", false));
             bwDensity = new BufferedWriter(new FileWriter(path + "ForestFire_Density.txt", true));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", false));
             bwElevation = new BufferedWriter(new FileWriter(path + "ForestFire_Elevation.txt", true));
-            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells.txt", false));
-            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells.txt", true));
+            bwBurnedCells = new BufferedWriter(new FileWriter(path + "BurnedCells-" + pDen + ".txt", false));
+            bwBurnedCells= new BufferedWriter(new FileWriter(path + "BurnedCells-" + pDen + ".txt", true));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,7 +192,7 @@ public class FileManager {
     Cells...
 
      */
-    public static Forest readTerrain(String path) throws IOException {
+    public static Forest readTerrain(String path, double pDen) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(path));
         String width = bf.readLine();
         String height = bf.readLine();
@@ -201,7 +203,7 @@ public class FileManager {
         for (int i = 0; i < w*h ; i++) {
             String[] s = bf.readLine().split(" ");
             cells[Integer.valueOf(s[0])][Integer.valueOf(s[1])] = new Cell(Integer.valueOf(s[0]), Integer.valueOf(s[1]), Double.valueOf(s[2]),
-                    Integer.valueOf(s[3]), Integer.valueOf(s[4]), Double.valueOf(s[5]), Double.valueOf(s[6]));
+                    Integer.valueOf(s[3]), Integer.valueOf(s[4]), Double.valueOf(s[5]), Double.valueOf(s[6]), pDen);
 
         }
         ans.setForest(cells);
@@ -209,36 +211,5 @@ public class FileManager {
         return ans;
     }
 
-    public static Forest readTerrainFromMultiple(String elevPath, String densPath, String vegPath) throws IOException {
-        BufferedReader elevR = new BufferedReader(new FileReader(elevPath));
-        BufferedReader densR = new BufferedReader(new FileReader(densPath));
-        BufferedReader vegR = new BufferedReader(new FileReader(vegPath));
-        int w = AMAZON_WIDTH;
-        int h = AMAZON_HEIGHT;
-        Forest forest = new Forest(w, h);
-        Cell[][] cells = new Cell[w][h];
-        for (int j = 0; j < h; j++){
-            String[] elev = elevR.readLine().split(" ");
-            String[] dens = densR.readLine().split(" ");
-            String[] veg = vegR.readLine().split(" ");
-            for (int i = 0; i < w; i++) {
-                int state = 2;
-                /*Tavira Copernicus*/
-                /*if(Double.valueOf(veg[i]) <= 142.0 || Double.valueOf(veg[i]) >= 331)
-                    state = 1;
-                */
-                /*Amazonas GlobalMap*/
-                if(Double.valueOf(veg[i]) >=16)
-                    state = 1;
-                cells[i][h-j-1] = new Cell(i,h-j-1,state,Double.valueOf(veg[i]).intValue(),Double.valueOf(dens[i]).intValue(),Double.valueOf(elev[i]),100.0);
-            }
-        }
-
-        forest.setForest(cells);
-        elevR.close();
-        densR.close();
-        vegR.close();
-        return forest;
-    }
 
 }
