@@ -26,10 +26,10 @@ public class SimulationImpl implements Simulation {
     private static double a = 0.078;
     private static double c1 = 0.045;
     private static double c2 = 0.131;
-    private double windSpeed = 8; // m/s
+    private double windSpeed = 10; // m/s
     private WindEnum windDirection = WindEnum.NORTH;
-    static boolean spottingActivated = true;
-    private double pc0 = 0.50;
+    static boolean spottingActivated = false;
+    private double pc0 = 0.25;
 
     private static double[][] northMatrix = {{45.0, 0.0, 45.0}, {90.0, 0.0, 90.0}, {135.0, 180.0, 135.0}};
     private static double[][] northEastMatrix = {{90.0, 45.0, 0}, {135.0, 0.0, 45.0}, {180.0, 135.0, 90.0}};
@@ -185,7 +185,7 @@ public class SimulationImpl implements Simulation {
 
                         while(Np > 0) {
                             Np--;
-                            int rn = (int)((Math.random())*50 + 1); // no dice mucho de este numero, solo q es random
+                            int rn = (int)((Math.random())*15 + 1); // no dice mucho de este numero, solo q es random
                             int aux = (int) (Math.random() * 8); //entre 0 y 7
                             double blastAngle = blastAngles[aux]; // entre 0 y 360
                             double windAngle; // = getWindAngle(equivalents[aux][0], equivalents[aux][1]);
